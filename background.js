@@ -2,7 +2,7 @@
  * Refinery 003 — service worker (message router)
  *
  * Receives conversation data from content script.
- * MVP: logs summary to console.
+ * MVP: accepts conversation sync messages without logging content.
  * Future: syncs to Supabase (phase 2).
  *
  * Source: step-008/findings.edn lines 52-57
@@ -21,38 +21,10 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type !== 'SYNC_CONVERSATION') return;
 
-  const { conversation_id, title, url, messages } = message.data;
-
-  console.log('[refinery-003] received conversation:', title);
-  console.log('[refinery-003]   id:', conversation_id);
-  console.log('[refinery-003]   url:', url);
-  console.log('[refinery-003]   messages:', messages.length);
-
-  // Log message breakdown by role
-  const roles = {};
-  for (const msg of messages) {
-    const role = msg.role || 'unknown';
-    roles[role] = (roles[role] || 0) + 1;
-  }
-  console.log('[refinery-003]   roles:', roles);
-
-  // Log first and last user/assistant messages for verification
-  const userMsgs = messages.filter(m => m.role === 'user');
-  const assistantMsgs = messages.filter(m => m.role === 'assistant');
-
-  if (userMsgs.length > 0) {
-    const first = userMsgs[0];
-    const preview = JSON.stringify(first.content?.parts?.[0] || '').slice(0, 80);
-    console.log('[refinery-003]   first user msg:', preview);
-  }
-
-  if (assistantMsgs.length > 0) {
-    const last = assistantMsgs[assistantMsgs.length - 1];
-    const preview = JSON.stringify(last.content?.parts?.[0] || '').slice(0, 80);
-    console.log('[refinery-003]   last assistant msg:', preview);
+  if (!message.data || !Array.isArray(message.data.messages)) {
+    sendResponse({ ok: false, error: 'invalid payload' });
+    return;
   }
 
   sendResponse({ ok: true });
 });
-
-console.log('[refinery-003] service worker started');
