@@ -28,7 +28,11 @@ Unfreeze intercepts the ChatGPT API response and shows only the last 250 message
 
 ## Configuration
 
-Default message limit is 250. To change:
+Default message limit is defined once in `config.js` via `DEFAULT_MAX_MESSAGES` (default: 250).
+
+To change it globally in code: edit `config.js` and reload the extension.
+
+You can still override per browser profile at runtime:
 
 1. Open DevTools on any ChatGPT page
 2. Run: `chrome.storage.local.set({ maxMessages: 500 })`

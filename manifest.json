@@ -24,7 +24,11 @@
         "https://chatgpt.com/*",
         "https://chat.openai.com/*"
       ],
-      "js": ["chatgpt-ui.js", "content.js"],
+      "js": [
+        "config.js",
+        "chatgpt-ui.js",
+        "content.js"
+      ],
       "run_at": "document_start",
       "world": "MAIN"
     },
@@ -33,7 +37,10 @@
         "https://chatgpt.com/*",
         "https://chat.openai.com/*"
       ],
-      "js": ["bridge.js"],
+      "js": [
+        "config.js",
+        "bridge.js"
+      ],
       "run_at": "document_start"
     }
   ]
