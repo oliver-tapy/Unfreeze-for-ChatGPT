@@ -14,13 +14,14 @@
   const STATUS_ID = 'refinery-status';
   const LOAD_BTN_ID = 'refinery-load-more';
   const CONVERSATION_URL_RE = /\/backend-api\/conversation\/[0-9a-f-]{36}$/;
-  let MAX_MESSAGES = 250;
+  const DEFAULT_MAX_MESSAGES = globalThis.REFINERY_CONFIG?.DEFAULT_MAX_MESSAGES ?? 250;
+  let MAX_MESSAGES = DEFAULT_MAX_MESSAGES;
 
   // Listen for settings from bridge
   window.addEventListener('message', (event) => {
     if (event.source !== window) return;
     if (event.data?.source === 'refinery-003-settings') {
-      if (event.data.maxMessages) {
+      if (typeof event.data.maxMessages === 'number' && event.data.maxMessages > 0) {
         MAX_MESSAGES = event.data.maxMessages;
         console.log('[refinery-003] settings: maxMessages =', MAX_MESSAGES);
       }

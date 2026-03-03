@@ -12,7 +12,9 @@
  */
 
 // Send settings to MAIN world
-chrome.storage.local.get({ maxMessages: 250 }, (settings) => {
+const DEFAULT_MAX_MESSAGES = globalThis.REFINERY_CONFIG?.DEFAULT_MAX_MESSAGES ?? 250;
+
+chrome.storage.local.get({ maxMessages: DEFAULT_MAX_MESSAGES }, (settings) => {
   window.postMessage({
     source: 'refinery-003-settings',
     maxMessages: settings.maxMessages,
